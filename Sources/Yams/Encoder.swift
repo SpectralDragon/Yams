@@ -237,7 +237,11 @@ extension _Encoder: SingleValueEncodingContainer {
 
     private func encode(yamlEncodable encodable: YAMLEncodable) throws {
         func encodeNode() {
-            node = encodable.box(options: options)
+            if let optionEncodable = encodable as? YAMLEncodableWithOptions {
+                node = optionEncodable.box(options: options)
+            } else {
+                node = encodable.box()
+            }
             if let stringValue = encodable as? (any StringProtocol), stringValue.contains("\n") {
                 node.scalar?.style = options.newLineScalarStyle
             }

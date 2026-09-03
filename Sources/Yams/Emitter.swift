@@ -308,7 +308,7 @@ public final class Emitter {
         /// - parameter mappingStyle:  Set the style for mappings (dictionaries)
         /// - parameter newLineScalarStyle: Set the style for newline-containing scalars
         /// - parameter redundancyAliasingStrategy: Set the strategy for identifying
-        /// - parameter numberFormatStrategy: Set the number format strategy to use when emitting YAML.
+        /// - parameter floatingPointNumberFormatStrategy: Set the number format strategy to use when emitting YAML.
         /// redundant structures and automatically aliasing them
         public init(canonical: Bool = false, indent: Int = 0, width: Int = 0, allowUnicode: Bool = false,
                     lineBreak: Emitter.LineBreak = .ln,
@@ -360,7 +360,7 @@ public final class Emitter {
     /// - parameter mappingStyle:  Set the style for mappings (dictionaries)
     /// - parameter newLineScalarStyle: Set the style for newline-containing scalars
     /// - parameter redundancyAliasingStrategy: Set the strategy for identifying redundant
-    /// - parameter numberFormatStrategy: Set the number format strategy to use when emitting YAML.
+    /// - parameter floatingPointNumberFormatStrategy: Set the number format strategy to use when emitting YAML.
     /// structures and automatically aliasing them
     public init(canonical: Bool = false,
                 indent: Int = 0,

@@ -14,6 +14,14 @@ import Yams
 
 /// Tests are copied from https://github.com/apple/swift/blob/main/test/stdlib/TestJSONEncoder.swift
 final class EncoderTests: XCTestCase, @unchecked Sendable { // swiftlint:disable:this type_body_length
+    private struct CustomScalar: ScalarRepresentable, YAMLEncodable {
+        let value: String
+
+        func represented() -> Node.Scalar {
+            return Node.Scalar(value)
+        }
+    }
+
     // MARK: - Encoding Top-Level Empty Types
     func testEncodingTopLevelEmptyStruct() {
         let empty = EmptyStruct()
@@ -39,6 +47,11 @@ final class EncoderTests: XCTestCase, @unchecked Sendable { // swiftlint:disable
         _testRoundTrip(of: Double(3.141592653),
                         with: YAMLEncoder.Options(floatingPointNumberFormatStrategy: .decimal),
                         expectedYAML: "3.141592653\n")
+    }
+
+    func testExistingScalarRepresentableConformanceStillEncodes() {
+        XCTAssertEqual(try Node(CustomScalar(value: "custom")), "custom")
+        XCTAssertEqual(try YAMLEncoder().encode(CustomScalar(value: "custom")), "custom\n")
     }
 
     func testDecimalDoubleStyle() throws {
@@ -87,6 +100,12 @@ final class EncoderTests: XCTestCase, @unchecked Sendable { // swiftlint:disable
         _testRoundTrip(of: Double.infinity,
                         with: YAMLEncoder.Options(floatingPointNumberFormatStrategy: .decimal),
                         expectedYAML: ".inf\n")
+    }
+
+    func testDecimalDoubleNaN() throws {
+        let encoder = YAMLEncoder()
+        encoder.options.floatingPointNumberFormatStrategy = .decimal
+        XCTAssertEqual(try encoder.encode(Double.nan), ".nan\n")
     }
 
     func testEncodingTopLevelSingleValueClass() {
